@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:title="@string/settings_item_text"
+        android:id="@+id/db_search_settings_item"
+        android:icon="@drawable/settings_icon"/>
+
+    <item
+        android:title="@string/settings_item_text"
+        android:id="@+id/db_search_remove_all_movies_item"
+        android:icon="@drawable/remove_icon"/>
+
+    <item
+        android:enabled="false"
+        android:visible="false"
+        android:id="@+id/db_restore_movies_item"
+        android:icon="@drawable/restore_icon"
+        android:title="@string/restore_item_text"/>
+
+</menu>

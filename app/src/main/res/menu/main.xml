@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+
+    >
+
+    <item
+        android:id="@+id/action_storeItem"
+        android:orderInCategory="100"
+        android:icon="@drawable/store_icon"
+        android:title="Add New Item"/>
+
+    <item
+        android:id="@+id/advanced_store_option"
+        android:orderInCategory="100"
+        android:icon="@drawable/advanced_icon"
+        android:title="Advanced Settings"/>
+
+</menu>

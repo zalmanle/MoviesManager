@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="@string/preferences_label_text">
+    <PreferenceScreen
+        android:key="@string/movies_list_settings_key"
+        android:title="@string/movies_list_settings_title_text">
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="@string/list_enable_watched_key"
+            android:summaryOff="@string/list_enable_watched_off_text"
+            android:summaryOn="@string/list_enable_watched_on_text"
+            android:title="@string/list_enable_watched_title" />
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="@string/list_enable_year_key"
+            android:summaryOff="@string/enable_year_off_text"
+            android:summaryOn="@string/enable_year_on_text"
+            android:title="@string/enable_year_title" />
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="@string/list_enable_rate_key"
+            android:summaryOff="@string/enable_rate_off_text"
+            android:summaryOn="@string/enable_rate_on_text"
+            android:title="@string/enable_rate_title" />
+
+        <ListPreference
+            android:defaultValue="0"
+            android:dialogTitle="@string/image_shapes_list_title"
+            android:entries="@array/image_types"
+            android:entryValues="@array/image_type_values"
+            android:key="@string/movies_list_image_shapes_list_key"
+            android:summary="@string/image_shapes_list_summary"
+            android:title="@string/image_shapes_list_title" />
+
+        <ListPreference
+            android:defaultValue="0"
+            android:dialogTitle="@string/order_list_title"
+            android:entries="@array/order_types"
+            android:entryValues="@array/order_type_values"
+            android:key="@string/movies_list_order_list_key"
+            android:summary="@string/order_list_summary"
+            android:title="@string/order_list_title" />
+
+
+    </PreferenceScreen>
+    <PreferenceScreen
+        android:key="@string/search_movies_settings_key"
+        android:title="@string/search_movies_settings_title_text">
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="@string/search_enable_watched_key"
+            android:summaryOff="@string/search_enable_watched_off_text"
+            android:summaryOn="@string/search_enable_watched_on_text"
+            android:title="@string/search_enable_watched_title" />
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="@string/search_enable_year_key"
+            android:summaryOff="@string/enable_year_off_text"
+            android:summaryOn="@string/enable_year_on_text"
+            android:title="@string/enable_year_title" />
+
+        <ListPreference
+            android:defaultValue="0"
+            android:dialogTitle="@string/image_shapes_list_title"
+            android:entries="@array/image_types"
+            android:entryValues="@array/image_type_values"
+            android:key="@string/web_search_image_shapes_list_key"
+            android:summary="@string/image_shapes_list_summary"
+            android:title="@string/image_shapes_list_title" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="@string/search_enable_rate_key"
+            android:summaryOff="@string/enable_rate_off_text"
+            android:summaryOn="@string/enable_rate_on_text"
+            android:title="@string/enable_rate_title" />
+
+        <ListPreference
+            android:defaultValue="0"
+            android:dialogTitle="@string/order_list_title"
+            android:entries="@array/order_types"
+            android:entryValues="@array/order_type_values"
+            android:key="@string/web_search_order_list_key"
+            android:summary="@string/order_list_summary"
+            android:title="@string/order_list_title" />
+
+    </PreferenceScreen>
+    <PreferenceScreen
+        android:key="@string/db_search_movies_settings_key"
+        android:title="@string/db_search_movies_settings_title_text">
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="@string/db_search_enable_watched_key"
+            android:summaryOff="@string/search_enable_watched_off_text"
+            android:summaryOn="@string/search_enable_watched_on_text"
+            android:title="@string/search_enable_watched_title" />
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="@string/db_search_enable_year_key"
+            android:summaryOff="@string/enable_year_off_text"
+            android:summaryOn="@string/enable_year_on_text"
+            android:title="@string/enable_year_title" />
+
+        <ListPreference
+            android:defaultValue="0"
+            android:dialogTitle="@string/image_shapes_list_title"
+            android:entries="@array/image_types"
+            android:entryValues="@array/image_type_values"
+            android:key="@string/db_search_image_shapes_list_key"
+            android:summary="@string/image_shapes_list_summary"
+            android:title="@string/image_shapes_list_title" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="@string/db_search_enable_rate_key"
+            android:summaryOff="@string/enable_rate_off_text"
+            android:summaryOn="@string/enable_rate_on_text"
+            android:title="@string/enable_rate_title" />
+
+        <ListPreference
+            android:defaultValue="0"
+            android:dialogTitle="@string/order_list_title"
+            android:entries="@array/order_types"
+            android:entryValues="@array/order_type_values"
+            android:key="@string/db_search_order_list_key"
+            android:summary="@string/order_list_summary"
+            android:title="@string/order_list_title" />
+
+    </PreferenceScreen>
+</PreferenceScreen>

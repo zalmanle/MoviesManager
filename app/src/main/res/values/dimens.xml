@@ -1,0 +1,16 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="emulator_floating_btn_bottom_margin">1dp</dimen>
+    <dimen name="emulator_land_floating_btn_bottom_margin">0dp</dimen>
+    <dimen name="device_floating_btn_bottom_margin">20dp</dimen>
+    <dimen name="device_store_movie_view_text_size">20sp</dimen>
+    <dimen name="emulator_store_movie_view_text_size">25sp</dimen>
+    <dimen name="emulator_medium_view_size">50dp</dimen>
+    <dimen name="emulator_large_view_size">70dp</dimen>
+    <dimen name="device_medium_view_size">40dp</dimen>
+    <dimen name="device_large_view_size">60dp</dimen>
+
+
+</resources>

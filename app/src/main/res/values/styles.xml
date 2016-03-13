@@ -1,0 +1,50 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+    </style>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme.Base" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+        <!-- Your theme items go here -->
+
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="actionOverflowButtonStyle">@style/OverFlow</item>
+        <item name="android:textColorSecondary">@color/textColorSecondary</item>
+    </style>
+
+    <!-- Styles -->
+    <style name="OverFlow" parent="Widget.AppCompat.ActionButton.Overflow">
+        <item name="android:src">@drawable/wrench_icon_3</item>
+    </style>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme.Base.SecondaryPages" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+        <!-- Your theme items go here -->
+
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="actionOverflowButtonStyle">@style/OverFlowSP</item>
+        <item name="android:textColorSecondary">@color/textColorSecondary</item>
+    </style>
+
+
+    <!-- Styles -->
+    <style name="OverFlowSP" parent="Widget.AppCompat.ActionButton.Overflow">
+        <item name="android:src">@drawable/store_icon</item>
+    </style>
+
+
+
+
+
+
+</resources>

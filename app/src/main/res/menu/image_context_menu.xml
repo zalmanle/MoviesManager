@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/store_image_menu_item"
+        android:title="@string/image_menu_store_item_text"
+        >
+    </item>
+    <item
+        android:id="@+id/store_image_to_gallery_menu_item"
+        android:title="@string/image_menu_store_to_gallery_item_text"
+        >
+    </item>
+    <item
+        android:id="@+id/upload_image_from_gallery_menu_item"
+        android:title="@string/image_menu_upload_gallery_image_item"
+        >
+    </item>
+    <item
+        android:id="@+id/share_image_menu_item"
+        android:title="@string/share_image_option_text"
+        >
+
+    </item>
+</menu>

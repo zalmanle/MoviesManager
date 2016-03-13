@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group>
+        <item
+            android:id="@+id/remove_all_item"
+            android:icon="@android:drawable/ic_menu_delete"
+            android:title="@string/main_screen_menu_remove_item_text">
+
+        </item>
+        <item
+            android:enabled="false"
+            android:visible="false"
+            android:id="@+id/restore_movies_item"
+            android:icon="@drawable/restore_icon"
+            android:title="@string/restore_item_text"/>
+
+
+
+
+        <item
+        android:id="@+id/settings_item"
+        android:title="@string/settings_item_text"
+       />
+
+        <item
+            android:id="@+id/db_search_item"
+            android:title="@string/db_search_label_text"
+            />
+
+
+        <item
+            android:id="@+id/exit_item"
+            android:icon="@android:drawable/ic_menu_close_clear_cancel"
+            android:title="@string/main_screen_menu_exit_item_text">
+
+        </item>
+
+
+    </group>
+</menu>

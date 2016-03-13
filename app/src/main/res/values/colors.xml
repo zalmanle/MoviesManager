@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Base colors -->
+    <color name="colorPrimary">#57d9d9</color>
+    <color name="colorPrimaryDark">#38aee1</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="textColorSecondary">#616aea</color>
+    <!-- Rate colors -->
+    <color name="color_1">#ffffff</color>
+    <color name="color_2">#eadd4d</color>
+    <color name="color_3">#8ce65f</color>
+    <color name="color_4">#63efed</color>
+    <color name="color_5">#546de7</color>
+    <color name="color_6">#a168de</color>
+    <color name="color_7">#e94eec</color>
+    <color name="color_8">#ec577c</color>
+    <color name="color_9">#d20f9e</color>
+    <color name="color_10">#da2952</color>
+
+</resources>

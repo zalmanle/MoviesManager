@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- MOVIES OPTIONS ARRAY -->
+    <string-array name="movie_options_items">
+        <item>@string/share_image_option_text</item>
+        <item>@string/edit_movie_text</item>
+        <item>@string/delete_movie_text</item>
+    </string-array>
+    <!-- ADVANCED OPTIONS ARRAY -->
+    <string-array name="advanced_options_items">
+        <item>@string/watched_movie_option_text</item>
+        <item>@string/add_movie_rate_option_text</item>
+    </string-array>
+    <!-- RATE COLORS ARRAY -->
+    <array name="rate_colors_resources">
+        <item>@color/color_1</item>
+        <item>@color/color_2</item>
+        <item>@color/color_3</item>
+        <item>@color/color_4</item>
+        <item>@color/color_5</item>
+        <item>@color/color_6</item>
+        <item>@color/color_7</item>
+        <item>@color/color_8</item>
+        <item>@color/color_9</item>
+        <item>@color/color_10</item>
+    </array>
+    <!-- RATES ARRAY -->
+    <string-array name="rates">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+    </string-array>
+    <string-array name="image_types">
+        <item>Default</item>
+        <item>Rounded</item>
+        <item>Circular</item>
+        <item>Hexagon</item>
+        <item>Octogon</item>
+        <item>Bubble</item>
+    </string-array>
+    <string-array name="image_type_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+    <string-array name="order_types">
+        <item>By Insert</item>
+        <item>Subject</item>
+        <item>Year(ASC)</item>
+        <item>Year(DESC)</item>
+    </string-array>
+    <string-array name="order_type_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+    <string-array name="db_search_options">
+        <item>Subject</item>
+        <item>Year</item>
+        <item>Fragment Of Subject</item>
+    </string-array>
+
+</resources>
