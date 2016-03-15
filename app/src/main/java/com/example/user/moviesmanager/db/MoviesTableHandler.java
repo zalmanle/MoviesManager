@@ -347,19 +347,21 @@ public class MoviesTableHandler {
         String date;
         int temp = 0;
 
-        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+        if((!cursor.isClosed())&&(cursor.moveToFirst())){
+            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
 
-            id = cursor.getInt(cursor.getColumnIndex(MoviesDBConstants.ID));
-            subject = cursor.getString(cursor.getColumnIndex(MoviesDBConstants.SUBJECT));
-            body = cursor.getString(cursor.getColumnIndex(MoviesDBConstants.BODY));
-            imageUrl = cursor.getString(cursor.getColumnIndex(MoviesDBConstants.IMAGE_URL));
-            rate = cursor.getInt(cursor.getColumnIndex(MoviesDBConstants.RATE));
-            temp = cursor.getInt(cursor.getColumnIndex(MoviesDBConstants.WATCHED));
-            watched = (temp == 1 ? true : false);
-            date = cursor.getString(cursor.getColumnIndex(MoviesDBConstants.DATE));
-            Movie movie = new Movie(id,subject,body,imageUrl,watched,rate,date);
-            list.add(movie);
+                id = cursor.getInt(cursor.getColumnIndex(MoviesDBConstants.ID));
+                subject = cursor.getString(cursor.getColumnIndex(MoviesDBConstants.SUBJECT));
+                body = cursor.getString(cursor.getColumnIndex(MoviesDBConstants.BODY));
+                imageUrl = cursor.getString(cursor.getColumnIndex(MoviesDBConstants.IMAGE_URL));
+                rate = cursor.getInt(cursor.getColumnIndex(MoviesDBConstants.RATE));
+                temp = cursor.getInt(cursor.getColumnIndex(MoviesDBConstants.WATCHED));
+                watched = (temp == 1 ? true : false);
+                date = cursor.getString(cursor.getColumnIndex(MoviesDBConstants.DATE));
+                Movie movie = new Movie(id,subject,body,imageUrl,watched,rate,date);
+                list.add(movie);
 
+            }
         }
 
         cursor.close();
