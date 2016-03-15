@@ -39,7 +39,6 @@ public class MoviesListActivity extends AppCompatActivity
 
     //region Constants
     private static final int LOADER_ID = 0;
-
     private static final String MOVIES_LIST_KEY = "movies list";
     //endregion
     //region INSTANCE VARIABLES

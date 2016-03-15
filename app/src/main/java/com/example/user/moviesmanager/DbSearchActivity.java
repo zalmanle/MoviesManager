@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -42,6 +43,8 @@ public class DbSearchActivity extends AppCompatActivity {
     private static final int SUBJECT_FRAGMENT_SEARCH_OPTION = 2;
 
     private static final String DB_SEARCH_STRING_KEY = "db_search_string_key";
+
+    private static final String MOVIES_LIST_KEY = "movies list";
     //endregion
 
     //region Instance Variables
@@ -86,13 +89,15 @@ public class DbSearchActivity extends AppCompatActivity {
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
 
+        savedInstanceState.putParcelableArrayList(MOVIES_LIST_KEY, (ArrayList<? extends Parcelable>) results);
         savedInstanceState.putString(DB_SEARCH_STRING_KEY, searchString);
     }
 
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-
+        List<Movie>list = savedInstanceState.getParcelableArrayList(MOVIES_LIST_KEY);
+        updateResultsList(list);
         searchString = savedInstanceState.getString(DB_SEARCH_STRING_KEY);
     }
 

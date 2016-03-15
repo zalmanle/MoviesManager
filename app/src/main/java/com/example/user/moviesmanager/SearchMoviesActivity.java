@@ -4,6 +4,7 @@ package com.example.user.moviesmanager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
@@ -35,6 +36,8 @@ public class SearchMoviesActivity extends AppCompatActivity
     private static final int OFFSET = 1;
 
     private static final String SEARCH_STRING_KEY = "search_string";
+
+    private static final String MOVIES_LIST_KEY = "movies list";
     //region INSTANCE VARIABLES
     private EditText searchEditText;
 
@@ -70,14 +73,15 @@ public class SearchMoviesActivity extends AppCompatActivity
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
-
+        savedInstanceState.putParcelableArrayList(MOVIES_LIST_KEY, (ArrayList<? extends Parcelable>)resultsList);
         savedInstanceState.putString(SEARCH_STRING_KEY, searchString);
     }
 
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-
+        List<Movie>list = savedInstanceState.getParcelableArrayList(MOVIES_LIST_KEY);
+        updateResultsList(list);
         searchString = savedInstanceState.getString(SEARCH_STRING_KEY);
     }
 
@@ -148,7 +152,7 @@ public class SearchMoviesActivity extends AppCompatActivity
         switch(requestCode){
             case Constants.PREFERENCES_REQUEST_CODE:
                 if(resultCode == RESULT_OK){
-
+                    setResultsListView();
                     if(!searchString.equals(Constants.EMPTY_STRING)) {
                         new LoadMoviesTask(loadMoviesBar, SearchMoviesActivity.this).execute(searchString.trim());
                     }
