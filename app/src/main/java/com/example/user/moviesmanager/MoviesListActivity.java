@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -38,6 +39,8 @@ public class MoviesListActivity extends AppCompatActivity
 
     //region Constants
     private static final int LOADER_ID = 0;
+
+    private static final String MOVIES_LIST_KEY = "movies list";
     //endregion
     //region INSTANCE VARIABLES
     private FloatingActionButton showOptionsBtn;
@@ -71,8 +74,7 @@ public class MoviesListActivity extends AppCompatActivity
         //initialize db handler
         handler = new MoviesTableHandler(this);
         //initMoviesList();
-        getLoaderManager().initLoader(LOADER_ID,null,this);
-
+        getLoaderManager().initLoader(LOADER_ID, null, this);
     }
 
     @Override
@@ -84,6 +86,20 @@ public class MoviesListActivity extends AppCompatActivity
             //initMoviesList();
             getLoaderManager().getLoader(LOADER_ID).forceLoad();
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putParcelableArrayList(MOVIES_LIST_KEY, (ArrayList<? extends Parcelable>) moviesList);
+    }
+
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        moviesList = savedInstanceState.getParcelableArrayList(MOVIES_LIST_KEY);
+        initAdapter();
+        super.onRestoreInstanceState(savedInstanceState);
     }
 
     @Override
@@ -436,13 +452,19 @@ public class MoviesListActivity extends AppCompatActivity
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+
         moviesList = MoviesTableHandler.getCursorData(data);
 
+
         if ((moviesList != null)) {
-            Movie.Helper.setMoviesOrder(moviesList, this);
-            adapter = new MoviesAdapter(this, R.layout.movies_list_item, moviesList);
-            moviesListView.setAdapter(adapter);
+            initAdapter();
         }
+    }
+
+    private void initAdapter() {
+        Movie.Helper.setMoviesOrder(moviesList, this);
+        adapter = new MoviesAdapter(this, R.layout.movies_list_item, moviesList);
+        moviesListView.setAdapter(adapter);
     }
 
     @Override
