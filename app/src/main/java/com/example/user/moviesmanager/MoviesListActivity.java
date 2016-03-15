@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -21,12 +20,12 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.example.user.moviesmanager.customadapter.MoviesAdapter;
 import com.example.user.moviesmanager.data.Movie;
 import com.example.user.moviesmanager.db.MoviesContract;
 import com.example.user.moviesmanager.db.MoviesTableHandler;
+import com.example.user.moviesmanager.info.MoviesUserInfo;
 import com.example.user.moviesmanager.utilities.Constants;
 import com.example.user.moviesmanager.utilities.Utilities;
 
@@ -60,6 +59,11 @@ public class MoviesListActivity extends AppCompatActivity
 
     private MenuItem restoreMenuItem;
 
+    private MoviesUserInfo info;
+
+    private ImageView shareImageContainer;
+
+    private int selectedPosition;
     //endregion
 
     @Override
@@ -68,6 +72,8 @@ public class MoviesListActivity extends AppCompatActivity
         setContentView(R.layout.activity_movies_list);
         //set ui elements
         setUIElements();
+
+        info = new MoviesUserInfo(this);
         //initialize garb age movie list
         garbageMoviesList = new ArrayList<Movie>();
         //initialize db handler
@@ -157,9 +163,10 @@ public class MoviesListActivity extends AppCompatActivity
             case R.id.remove_all_item:
                 if (moviesList != null) {
                     if (moviesList.size() > Constants.MOVIES_EMPTY_NUMBER) {
-                        showDeleteAllItemsWarning();
+
+                        info.showDeleteAllItemsWarning(deleteAllMoviesListener);
                     } else {
-                        Utilities.UI.makeImageToast(this, R.drawable.info_icon, R.string.empty_movies_storage_message, Toast.LENGTH_SHORT).show();
+                        info.displayInfoMessage(getString(R.string.empty_movies_storage_message));
                     }
 
                 }
@@ -274,15 +281,12 @@ public class MoviesListActivity extends AppCompatActivity
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 
-                ImageView imageView = null;
-                Bitmap image = null;
+                selectedPosition = position;
                 if (view instanceof LinearLayout) {
 
-                    imageView = (ImageView) view.findViewById(R.id.movies_list_item_image);
+                    shareImageContainer = (ImageView) view.findViewById(R.id.movies_list_item_image);
                 }
-                Movie movie = moviesList.get(position);
-                String title = movie.getSubject();
-                showMovieOptionDialog(position, imageView);
+                info.showMovieOptionDialog(optionsListener);
                 return true;
             }
         });
@@ -301,55 +305,49 @@ public class MoviesListActivity extends AppCompatActivity
 
 
     //region SHOW ALERT DIALOG ON LIST ITEM CLICKED
-    private void showMovieOptionDialog(final int position, final ImageView imageView) {
+    private void showMovieOptionDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.options_dialog_title);
-        builder.setItems(R.array.movie_options_items, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-                Movie movie;
-                switch (which) {
-                    case Constants.SHARE_IMAGE_CODE:
-                        try {
-                            Utilities.SystemHelper.shareImageFromImageView(MoviesListActivity.this, imageView);
-                        } catch (Exception e) {
-                            Utilities.UI.makeImageToast(MoviesListActivity.this, R.drawable.red_warning_icon, R.string.share_image_error_message, Toast.LENGTH_SHORT).show();
-                        }
-                        break;
-                    case Constants.EDIT_MOVIE_CODE:
-                        movie = moviesList.get(position);
-                        goToStoreMovieActivity(movie);
-                        break;
-                    case Constants.DELETE_MOVIE_CODE:
-                        showDeleteItemWarning(position);
-                        break;
-                }
-            }
-        });
-
-
+        builder.setItems(R.array.movie_options_items,optionsListener);
         AlertDialog dialog = builder.create();
         dialog.show();
 
     }
+
+    DialogInterface.OnClickListener optionsListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+
+            Movie movie;
+            switch (which) {
+                case Constants.SHARE_IMAGE_CODE:
+                    try {
+                        Utilities.SystemHelper.shareImageFromImageView(MoviesListActivity.this,shareImageContainer);
+                    } catch (Exception e) {
+                        info.displayWarningMessage(getString(R.string.share_image_error_message));
+                    }
+                    break;
+                case Constants.EDIT_MOVIE_CODE:
+                    movie = moviesList.get(selectedPosition);
+                    goToStoreMovieActivity(movie);
+                    break;
+                case Constants.DELETE_MOVIE_CODE:
+                    info.showDeleteItemWarning(deleteMovieListener);
+                    break;
+            }
+        }
+    };
     //endregion
 
     //endregion
 
     //region SHOW ALERT DIALOG TO REMOVE ITEM
-    private void showDeleteItemWarning(final int position) {
+    private void showDeleteItemWarning() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.warning_title_text);
         builder.setIcon(R.drawable.red_warning_icon);
         builder.setMessage(R.string.delete_one_movie_warning_message);
-        builder.setPositiveButton(R.string.positive_button_text, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                deleteMovie(position);
-                appearRestoreMenuItem();
-            }
-        });
+        builder.setPositiveButton(R.string.positive_button_text, deleteMovieListener);
         builder.setNegativeButton(R.string.negative_button_text, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -360,6 +358,14 @@ public class MoviesListActivity extends AppCompatActivity
         dialog.show();
 
     }
+
+    DialogInterface.OnClickListener deleteMovieListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            deleteMovie(selectedPosition);
+            appearRestoreMenuItem();
+        }
+    };
 
     private void deleteMovie(int position) {
         Movie movie = moviesList.get(position);
@@ -382,24 +388,26 @@ public class MoviesListActivity extends AppCompatActivity
         builder.setTitle(R.string.warning_title_text);
         builder.setIcon(R.drawable.red_warning_icon);
         builder.setMessage(R.string.delete_all_movies_warning_message);
-        builder.setPositiveButton(R.string.positive_button_text, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                deleteMovies();
-                appearRestoreMenuItem();
-
-            }
-        });
-        builder.setNegativeButton(R.string.negative_button_text, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
+        builder.setPositiveButton(R.string.positive_button_text,deleteAllMoviesListener);
+                builder.setNegativeButton(R.string.negative_button_text, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
         AlertDialog dialog = builder.create();
         dialog.show();
 
     }
+
+    DialogInterface.OnClickListener deleteAllMoviesListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            deleteMovies();
+            appearRestoreMenuItem();
+
+        }
+    };
 
     private void deleteMovies() {
         garbageMoviesList.addAll(moviesList);

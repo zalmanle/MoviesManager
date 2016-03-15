@@ -18,10 +18,10 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.user.moviesmanager.customadapter.MoviesAdapter;
 import com.example.user.moviesmanager.data.Movie;
+import com.example.user.moviesmanager.info.UserInfo;
 import com.example.user.moviesmanager.tasks.LoadMoviesTask;
 import com.example.user.moviesmanager.tasks.OnDataReceivedListener;
 import com.example.user.moviesmanager.utilities.Constants;
@@ -55,6 +55,7 @@ public class SearchMoviesActivity extends AppCompatActivity
 
     private  InputMethodManager imm;
 
+    private UserInfo info;
     //endregion
 
     @Override
@@ -63,6 +64,7 @@ public class SearchMoviesActivity extends AppCompatActivity
         setContentView(R.layout.activity_search_movies);
         //set ui elements
         setUIElements();
+        info = new UserInfo(this);
     }
 
     @Override
@@ -130,13 +132,12 @@ public class SearchMoviesActivity extends AppCompatActivity
 
             }
             else {
-                //Toast.makeText(this,R.string.not_movie_found_message,Toast.LENGTH_LONG).show();
-                Utilities.UI.makeImageToast(this,R.drawable.red_warning_icon,R.string.not_movie_found_message,Toast.LENGTH_LONG).show();
+                info.displayInfoMessage(getString(R.string.not_movie_found_message));
             }
         }
         else {
-           // Toast.makeText(this,R.string.not_movie_found_message,Toast.LENGTH_LONG).show();
-            Utilities.UI.makeImageToast(this,R.drawable.red_warning_icon,R.string.not_movie_found_message,Toast.LENGTH_LONG).show();
+             info.displayInfoMessage(getString(R.string.not_movie_found_message));
+
         }
     }
 
@@ -234,8 +235,7 @@ public class SearchMoviesActivity extends AppCompatActivity
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     searchString = searchEditText.getText().toString();
                     if (searchString.equals(Constants.EMPTY_STRING)) {
-                        //Toast.makeText(SearchMoviesActivity.this, R.string.empty_search_string_message, Toast.LENGTH_LONG).show();
-                        Utilities.UI.makeImageToast(SearchMoviesActivity.this,R.drawable.red_warning_icon,R.string.empty_search_string_message,Toast.LENGTH_LONG).show();
+                        info.displayWarningMessage(getString(R.string.empty_search_string_message));
                         return true;
                     }
                     Utilities.UI.hide_keyboard(SearchMoviesActivity.this);

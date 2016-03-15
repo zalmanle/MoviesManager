@@ -22,11 +22,11 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.user.moviesmanager.customadapter.MoviesAdapter;
 import com.example.user.moviesmanager.data.Movie;
 import com.example.user.moviesmanager.db.MoviesTableHandler;
+import com.example.user.moviesmanager.info.MoviesUserInfo;
 import com.example.user.moviesmanager.utilities.Constants;
 import com.example.user.moviesmanager.utilities.Utilities;
 
@@ -72,14 +72,18 @@ public class DbSearchActivity extends AppCompatActivity {
 
     private MenuItem restoreMenuItem;
 
+    private MoviesUserInfo info;
 
+    private ImageView shareImageContainer;
 
+    private int selectedPosition;
     //endregion
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_db_search);
         handler = new MoviesTableHandler(this);
+        info = new MoviesUserInfo(this);
         //initialize garb age movie list
         garbageMoviesList = new ArrayList<Movie>();
         initUIElements();
@@ -118,7 +122,7 @@ public class DbSearchActivity extends AppCompatActivity {
                 goToPreferencesScreen();
                 break;
             case R.id.db_search_remove_all_movies_item:
-                showDeleteAllItemsWarning();
+                info.showDeleteAllItemsWarning(deleteAllMoviesListener);
                 break;
             case R.id.db_restore_movies_item:
                 disappearRestoreMenuItem();
@@ -227,13 +231,13 @@ public class DbSearchActivity extends AppCompatActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 
-                ImageView imageView = null;
                 String customText = getString(R.string.custom_layout_tag_text);
+                selectedPosition = position;
                 if (view.getTag().equals(customText)) {
 
-                    imageView = (ImageView) view.findViewById(R.id.movies_list_item_image);
+                    shareImageContainer = (ImageView) view.findViewById(R.id.movies_list_item_image);
                 }
-                showMovieOptionDialog(position, imageView);
+                info.showMovieOptionDialog(optionsListener);
                 return true;
             }
         });
@@ -318,16 +322,14 @@ public class DbSearchActivity extends AppCompatActivity {
         searchString = dbSearchEditText.getText().toString();
         searchString = searchString.trim();
         if (searchString.equals(Constants.EMPTY_STRING)) {
-            //Toast.makeText(SearchMoviesActivity.this, R.string.empty_search_string_message, Toast.LENGTH_LONG).show();
-
-            Utilities.UI.makeImageToast(DbSearchActivity.this, R.drawable.red_warning_icon, R.string.empty_search_string_message, Toast.LENGTH_LONG).show();
+            info.displayWarningMessage(getString( R.string.empty_search_string_message));
             return true;
         }
         Utilities.UI.hide_keyboard(DbSearchActivity.this);
         if (currentSearchOption == SUBJECT_SEARCH_OPTION) {
             movies = handler.getMovieBySubject(searchString);
             if ((movies == null) ||(movies.size() == Constants.MOVIES_EMPTY_NUMBER)) {
-                Utilities.UI.makeImageToast(DbSearchActivity.this, R.drawable.red_warning_icon, R.string.not_movie_found_message, Toast.LENGTH_LONG).show();
+                info.displayInfoMessage(getString(R.string.not_movie_found_message));
                 return true;
             }
 
@@ -337,20 +339,20 @@ public class DbSearchActivity extends AppCompatActivity {
             if (Movie.Helper.isValidYear(searchString)) {
                 movies = handler.getMovieByYear(searchString);
                 if ((movies == null) ||(movies.size() == Constants.MOVIES_EMPTY_NUMBER)) {
-                    Utilities.UI.makeImageToast(DbSearchActivity.this, R.drawable.red_warning_icon, R.string.not_movie_found_message, Toast.LENGTH_LONG).show();
+                    info.displayInfoMessage(getString(R.string.not_movie_found_message));
                     return true;
                 }
 
                 updateResultsList(movies);
 
             } else {
-                Utilities.UI.makeImageToast(DbSearchActivity.this, R.drawable.red_warning_icon, R.string.invalid_year_message, Toast.LENGTH_LONG).show();
+                info.displayWarningMessage(getString(R.string.invalid_year_message));
             }
 
         } else if(currentSearchOption == SUBJECT_FRAGMENT_SEARCH_OPTION){
             movies = handler.getMovieBySubjectFragment(searchString);
             if ((movies == null) ||(movies.size() == Constants.MOVIES_EMPTY_NUMBER)) {
-                Utilities.UI.makeImageToast(DbSearchActivity.this, R.drawable.red_warning_icon, R.string.not_movie_found_message, Toast.LENGTH_LONG).show();
+                info.displayWarningMessage(getString(R.string.not_movie_found_message));
                 return true;
             }
             updateResultsList(movies);
@@ -377,24 +379,26 @@ public class DbSearchActivity extends AppCompatActivity {
         builder.setTitle(R.string.warning_title_text);
         builder.setIcon(R.drawable.red_warning_icon);
         builder.setMessage(R.string.delete_all_movies_warning_message);
-        builder.setPositiveButton(R.string.positive_button_text, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                deleteMovies();
-                appearRestoreMenuItem();
-                setResult(RESULT_OK);
-            }
-        });
-        builder.setNegativeButton(R.string.negative_button_text, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
+        builder.setPositiveButton(R.string.positive_button_text, deleteAllMoviesListener);
+                builder.setNegativeButton(R.string.negative_button_text, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
         AlertDialog dialog = builder.create();
         dialog.show();
 
     }
+
+    DialogInterface.OnClickListener deleteAllMoviesListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            deleteMovies();
+            appearRestoreMenuItem();
+            setResult(RESULT_OK);
+        }
+    };
 
     private void deleteMovies() {
         Movie movie;
@@ -411,29 +415,31 @@ public class DbSearchActivity extends AppCompatActivity {
     //endregion
 
     //region SHOW ALERT DIALOG TO REMOVE ITEM
-    private void showDeleteItemWarning(final int position) {
+    private void showDeleteItemWarning() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.warning_title_text);
         builder.setIcon(R.drawable.red_warning_icon);
         builder.setMessage(R.string.delete_one_movie_warning_message);
-        builder.setPositiveButton(R.string.positive_button_text, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                deleteMovie(position);
-                appearRestoreMenuItem();
-                setResult(RESULT_OK);
-            }
-        });
-        builder.setNegativeButton(R.string.negative_button_text, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
+        builder.setPositiveButton(R.string.positive_button_text, deleteMovieListener);
+                builder.setNegativeButton(R.string.negative_button_text, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
         AlertDialog dialog = builder.create();
         dialog.show();
 
     }
+
+    DialogInterface.OnClickListener deleteMovieListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            deleteMovie(selectedPosition);
+            appearRestoreMenuItem();
+            setResult(RESULT_OK);
+        }
+    };
 
     private void deleteMovie(int position) {
         Movie movie = results.get(position);
@@ -451,37 +457,38 @@ public class DbSearchActivity extends AppCompatActivity {
     //endregion
 
     //region SHOW ALERT DIALOG ON LIST ITEM  LONG CLICKED
-    private void showMovieOptionDialog(final int position,final ImageView imageView) {
+    private void showMovieOptionDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.options_dialog_title);
-        builder.setItems(R.array.movie_options_items, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-                Movie movie;
-                switch (which) {
-                    case Constants.SHARE_IMAGE_CODE:
-                        try {
-                            Utilities.SystemHelper.shareImageFromImageView(DbSearchActivity.this, imageView);
-                        } catch (Exception e) {
-                            Utilities.UI.makeImageToast(DbSearchActivity.this, R.drawable.red_warning_icon, R.string.share_image_error_message, Toast.LENGTH_SHORT).show();
-                        }
-                        break;
-                    case Constants.EDIT_MOVIE_CODE:
-                        selectedMovie = results.get(position);
-                        goToEditMovieScreen();
-                        break;
-                    case Constants.DELETE_MOVIE_CODE:
-                        showDeleteItemWarning(position);
-                        break;
-                }
-            }
-        });
-
+        builder.setItems(R.array.movie_options_items,optionsListener);
         AlertDialog dialog = builder.create();
         dialog.show();
 
     }
+
+    DialogInterface.OnClickListener optionsListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+
+            Movie movie;
+            switch (which) {
+                case Constants.SHARE_IMAGE_CODE:
+                    try {
+                        Utilities.SystemHelper.shareImageFromImageView(DbSearchActivity.this,shareImageContainer);
+                    } catch (Exception e) {
+                        info.displayWarningMessage(getString(R.string.share_image_error_message));
+                    }
+                    break;
+                case Constants.EDIT_MOVIE_CODE:
+                    selectedMovie = results.get(selectedPosition);
+                    goToEditMovieScreen();
+                    break;
+                case Constants.DELETE_MOVIE_CODE:
+                    info.showDeleteItemWarning(deleteMovieListener);
+                    break;
+            }
+        }
+    };
     //endregion
 
 }

@@ -22,11 +22,11 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.example.user.moviesmanager.data.DataConstants;
 import com.example.user.moviesmanager.data.Movie;
 import com.example.user.moviesmanager.db.MoviesTableHandler;
+import com.example.user.moviesmanager.info.AdvancedOptionsUserInfo;
 import com.example.user.moviesmanager.tasks.LoadMovieBodyTask;
 import com.example.user.moviesmanager.tasks.OnDataReceivedListener;
 import com.example.user.moviesmanager.utilities.Constants;
@@ -84,6 +84,10 @@ public class StoreMovieActivity extends AppCompatActivity implements OnDataRecei
     private boolean watched = false;
 
     private int movieRate = Constants.DEFAULT_MOVIE_RATE;
+
+    private AdvancedOptionsUserInfo info;
+
+    String[]rates;
     //endregion
 
     @Override
@@ -93,6 +97,8 @@ public class StoreMovieActivity extends AppCompatActivity implements OnDataRecei
         handler = new MoviesTableHandler(this);
         //initialize ui elements
         initUIElements();
+        info = new AdvancedOptionsUserInfo(this);
+        rates = getResources().getStringArray(R.array.rates);
 
 
     }
@@ -133,7 +139,7 @@ public class StoreMovieActivity extends AppCompatActivity implements OnDataRecei
                     Utilities.SystemHelper.shareImageFromImageView(StoreMovieActivity.this,posterImageView);
                 }
                 catch (Exception e){
-                    Utilities.UI.makeImageToast(StoreMovieActivity.this,R.drawable.red_warning_icon,R.string.share_image_error_message, Toast.LENGTH_SHORT).show();
+                    info.displayWarningMessage(getString(R.string.share_image_error_message));
                 }
                 break;
         }
@@ -164,7 +170,7 @@ public class StoreMovieActivity extends AppCompatActivity implements OnDataRecei
                 storeMovie();
                 break;
             case R.id.advanced_store_option:
-                showAdvancedOptionsDialog();
+                info.showAdvancedOptionsDialog(optionsListener);
                 break;
             case android.R.id.home:
                 setResult(RESULT_CANCELED);
@@ -181,7 +187,7 @@ public class StoreMovieActivity extends AppCompatActivity implements OnDataRecei
                 if (!handler.isMovieExist(movie)) {
                     handler.addMovie(movie);
                 } else {
-                    Utilities.UI.makeImageToast(this, R.drawable.info_icon, R.string.movie_exist_message, Toast.LENGTH_SHORT).show();
+                    info.displayInfoMessage(getString(R.string.movie_exist_message));
                 }
 
             } else {
@@ -351,14 +357,13 @@ public class StoreMovieActivity extends AppCompatActivity implements OnDataRecei
                 storeImageByFileName(data);
             }
             else {
-                //Toast.makeText(this,R.string.invalid_url_message,Toast.LENGTH_SHORT).show();
-                Utilities.UI.makeImageToast(this,R.drawable.red_warning_icon,R.string.invalid_url_message,Toast.LENGTH_SHORT).show();
+
+                info.displayWarningMessage(getString(R.string.invalid_url_message));
 
             }
         }
         else {
-           //Toast.makeText(this,R.string.empty_url_image_message,Toast.LENGTH_SHORT).show();
-           Utilities.UI.makeImageToast(this,R.drawable.red_warning_icon,R.string.empty_url_image_message,Toast.LENGTH_SHORT).show();
+            info.displayWarningMessage(getString(R.string.empty_url_image_message));
         }
 
     }
@@ -391,20 +396,19 @@ public class StoreMovieActivity extends AppCompatActivity implements OnDataRecei
 
         //check if subject is valid
         if(subject.equals(Constants.EMPTY_STRING)){
-            //Toast.makeText(this,R.string.empty_subject_message,Toast.LENGTH_LONG).show();
-            Utilities.UI.makeImageToast(this,R.drawable.red_warning_icon,R.string.empty_subject_message,Toast.LENGTH_LONG).show();
+
+            info.displayWarningMessage(getString(R.string.empty_subject_message));
             return false;
         }
 
         //check if url is valid
         if(!(Utilities.Helper.isValidURL(url)||Utilities.Helper.isValidImageName(url))){
-            //Toast.makeText(this,R.string.invalid_image_data_message,Toast.LENGTH_SHORT).show();
-            Utilities.UI.makeImageToast(this,R.drawable.red_warning_icon,R.string.empty_image_message,Toast.LENGTH_SHORT).show();
+            info.displayWarningMessage(getString(R.string.empty_image_message));
             return false;
         }
 
         if(!Movie.Helper.isValidYear(year.trim())){
-            Utilities.UI.makeImageToast(this,R.drawable.red_warning_icon,R.string.invalid_year_message,Toast.LENGTH_SHORT).show();
+            info.displayWarningMessage(getString(R.string.invalid_year_message));
             return false;
         }
 
@@ -477,27 +481,24 @@ public class StoreMovieActivity extends AppCompatActivity implements OnDataRecei
             Bitmap bitmap = ((BitmapDrawable) posterImageView.getDrawable()).getBitmap();
             //check if image exist in image view
             if (bitmap == null) {
-                // Toast.makeText(this, R.string.empty_image_message, Toast.LENGTH_SHORT).show();
-                Utilities.UI.makeImageToast(this,R.drawable.red_warning_icon,R.string.empty_image_message,Toast.LENGTH_SHORT).show();
+                info.displayWarningMessage(getString(R.string.empty_image_message));
                 return;
             }
             //store image and his name in preferences
             if(Utilities.SystemHelper.isFilePresent(fileName,this)){
 
-                Utilities.UI.makeImageToast(this,R.drawable.info_icon,R.string.already_stored_image_message,Toast.LENGTH_SHORT).show();
+                info.displayInfoMessage(getString(R.string.already_stored_image_message));
                 return;
             }
             Utilities.SystemHelper.storeImage(bitmap, fileName, this);
             urlEditText.setText(fileName);
-            Utilities.UI.makeImageToast(this,R.drawable.info_icon,R.string.warning_to_store_data_text,Toast.LENGTH_SHORT).show();
+            info.displayWarningMessage(getString(R.string.warning_to_store_data_text));
         }
         else if(posterImageView.getDrawable() == null){
-            //Toast.makeText(this,R.string.empty_image_message,Toast.LENGTH_SHORT).show();
-            Utilities.UI.makeImageToast(this,R.drawable.red_warning_icon,R.string.empty_image_message,Toast.LENGTH_SHORT).show();
+            info.displayWarningMessage(getString(R.string.empty_image_message));
         }
         else if(fileName == null){
-            //Toast.makeText(this,R.string.empty_file_name_message,Toast.LENGTH_SHORT).show();
-            Utilities.UI.makeImageToast(this,R.drawable.red_warning_icon,R.string.empty_file_name_message,Toast.LENGTH_SHORT).show();
+            info.displayWarningMessage(getString(R.string.empty_file_name_message));
         }
 
     }
@@ -505,36 +506,41 @@ public class StoreMovieActivity extends AppCompatActivity implements OnDataRecei
     //region SHOW ADVANCED OPTIONS DIALOG
     private void showAdvancedOptionsDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setItems(R.array.advanced_options_items, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                 switch (which){
-                    case WATCHED_POSITION:
-                        watched = true;
-                        break;
-                     case ADD_RATE_POSITION:
-                         showRatesDialog();
-                         break;
-                }
-            }
-        });
+        builder.setItems(R.array.advanced_options_items,optionsListener);
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
+    private DialogInterface.OnClickListener optionsListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            switch (which){
+                case WATCHED_POSITION:
+                    watched = true;
+                    break;
+                case ADD_RATE_POSITION:
+                    info.showRatesDialog(ratesListener);
+                    break;
+            }
+        }
+    };
     //endregion
     //region SHOW RATES DIALOG
     private void showRatesDialog(){
-        final String[]rates = getResources().getStringArray(R.array.rates);
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setItems(R.array.rates, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                movieRate = Integer.parseInt(rates[which]);
-            }
-        });
+        builder.setItems(R.array.rates,ratesListener);
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
+    private DialogInterface.OnClickListener ratesListener = new DialogInterface.OnClickListener() {
+
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            movieRate = Integer.parseInt(rates[which]);
+        }
+    };
     //endregion
 
     public void onShowImageClick(View view) {
@@ -551,8 +557,7 @@ public class StoreMovieActivity extends AppCompatActivity implements OnDataRecei
                 return;
             }
             else {
-                //Toast.makeText(this,R.string.invalid_file_name_message,Toast.LENGTH_SHORT).show();
-                Utilities.UI.makeImageToast(this,R.drawable.red_warning_icon,R.string.invalid_file_name_message,Toast.LENGTH_SHORT).show();
+                info.displayWarningMessage(getString(R.string.invalid_file_name_message));
                 return;
             }
         }
@@ -563,8 +568,7 @@ public class StoreMovieActivity extends AppCompatActivity implements OnDataRecei
 
         }
         else {
-            //Toast.makeText(this,R.string.invalid_url_message,Toast.LENGTH_SHORT).show();
-            Utilities.UI.makeImageToast(this,R.drawable.red_warning_icon,R.string.invalid_url_message,Toast.LENGTH_SHORT).show();
+            info.displayWarningMessage(getString(R.string.invalid_url_message));
             return;
         }
 
