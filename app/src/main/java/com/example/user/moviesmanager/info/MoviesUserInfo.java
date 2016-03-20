@@ -11,7 +11,7 @@ import com.example.user.moviesmanager.R;
  */
 public class MoviesUserInfo extends UserInfo {
 
-    public MoviesUserInfo(Context context) {
+    MoviesUserInfo(Context context) {
         super(context);
     }
 

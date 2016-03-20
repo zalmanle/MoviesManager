@@ -26,7 +26,7 @@ public class UserInfo {
     //endregion
 
     //region Constructor
-    public UserInfo(Context context) {
+    UserInfo(Context context) {
         this.context = context;
     }
     //endregion

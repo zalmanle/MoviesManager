@@ -11,7 +11,7 @@ import com.example.user.moviesmanager.R;
  */
 public class AdvancedOptionsUserInfo extends UserInfo {
 
-    public AdvancedOptionsUserInfo(Context context) {
+    AdvancedOptionsUserInfo(Context context) {
         super(context);
     }
 
