@@ -31,6 +31,7 @@ import com.example.user.moviesmanager.db.MoviesTableHandler;
 import com.example.user.moviesmanager.info.AdvancedOptionsUserInfo;
 import com.example.user.moviesmanager.tasks.LoadMovieBodyTask;
 import com.example.user.moviesmanager.tasks.OnDataReceivedListener;
+import com.example.user.moviesmanager.tasks.TasksFactory;
 import com.example.user.moviesmanager.utilities.Constants;
 import com.example.user.moviesmanager.utilities.Utilities;
 
@@ -96,6 +97,8 @@ public class StoreMovieActivity extends AppCompatActivity
     private boolean isStored;
 
     private boolean isChanged = false;
+
+    private LoadMovieBodyTask task;
     //endregion
 
     @Override
@@ -325,8 +328,10 @@ public class StoreMovieActivity extends AppCompatActivity
 
                 if(sender.equals(Constants.SEARCH_MOVIES_PAGE)){
 
-                      isNewAddition = true;
-                      new LoadMovieBodyTask(loadBodyPb,this).execute(movie);
+                    isNewAddition = true;
+                      //new LoadMovieBodyTask(loadBodyPb,this).execute(movie);
+                    task = (LoadMovieBodyTask) TasksFactory.getTask(TasksFactory.SUBJECT_TASK,loadBodyPb,this);
+                    task.execute(movie);
                 }
                 if(sender.equals((Constants.MOVIES_LIST_PAGE))||(sender.equals(Constants.SEARCH_MOVIES_PAGE))||(sender.equals(Constants.DB_SEARCH_PAGE))){
                     initEditTextFields();

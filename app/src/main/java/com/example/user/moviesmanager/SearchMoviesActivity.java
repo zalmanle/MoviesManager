@@ -24,6 +24,7 @@ import com.example.user.moviesmanager.data.Movie;
 import com.example.user.moviesmanager.info.UserInfo;
 import com.example.user.moviesmanager.tasks.LoadMoviesTask;
 import com.example.user.moviesmanager.tasks.OnDataReceivedListener;
+import com.example.user.moviesmanager.tasks.TasksFactory;
 import com.example.user.moviesmanager.utilities.Constants;
 import com.example.user.moviesmanager.utilities.Utilities;
 
@@ -56,6 +57,8 @@ public class SearchMoviesActivity extends AppCompatActivity
     private  InputMethodManager imm;
 
     private UserInfo info;
+
+    private LoadMoviesTask task;
     //endregion
 
     @Override
@@ -155,7 +158,9 @@ public class SearchMoviesActivity extends AppCompatActivity
                 if(resultCode == RESULT_OK){
                     setResultsListView();
                     if(!searchString.equals(Constants.EMPTY_STRING)) {
-                        new LoadMoviesTask(loadMoviesBar, SearchMoviesActivity.this).execute(searchString.trim());
+                        //new LoadMoviesTask(loadMoviesBar, SearchMoviesActivity.this).execute(searchString.trim());
+                        task = (LoadMoviesTask)TasksFactory.getTask(TasksFactory.MOVIES_TASK,loadMoviesBar,SearchMoviesActivity.this);
+                        task.execute(searchString.trim());
                     }
                 }
                 break;
@@ -239,7 +244,10 @@ public class SearchMoviesActivity extends AppCompatActivity
                         return true;
                     }
                     Utilities.UI.hide_keyboard(SearchMoviesActivity.this);
-                    new LoadMoviesTask(loadMoviesBar, SearchMoviesActivity.this).execute(searchString);
+                    //new LoadMoviesTask(loadMoviesBar, SearchMoviesActivity.this).execute(searchString);
+                    task = (LoadMoviesTask)TasksFactory.getTask(TasksFactory.MOVIES_TASK,loadMoviesBar,SearchMoviesActivity.this);
+                    task.execute(searchString.trim());
+
 
 
                     return true;
