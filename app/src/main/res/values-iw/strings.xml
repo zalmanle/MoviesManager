@@ -69,4 +69,13 @@
     <string name="db_search_movies_settings_title_text">הגדרות חיפוש סרטים</string>
     <string name="image_menu_store_to_gallery_item_text">לשמור תמונה לאלבום</string>
     <string name="image_menu_upload_gallery_image_item">לטעון תמונה מאלבום</string>
+    <string name="add_movie_success_message">נוסף סרט חדש!</string>
+    <string name="add_movie_failed_message">הוספת סרט נכשלה!</string>
+    <string name="edit_movie_success_message">סרט עורך בהצלחה!</string>
+    <string name="edit_movie_failed_message">עריכה נכשלה!</string>
+    <string name="no_change_detected_message">לא נמצאו שינויים!!</string>
+    <string name="movie_deleted_message">סרט נמחק!</string>
+    <string name="movie_list_deleted_message">קבוצת סרטים נמחקה!</string>
+    <string name="all_movies_deleted_message">כל הסרטים נמחקו!</string>
+    <string name="movies_back_message">סרטים שוחזרו!</string>
 </resources>

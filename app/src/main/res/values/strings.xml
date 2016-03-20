@@ -88,4 +88,13 @@
     <string name="db_search_enable_rate_key">db_search_enable_rate_key</string>
     <string name="db_search_order_list_key">db_search_order_list_key</string>
     <string name="custom_layout_tag_text">custom layout</string>
+    <string name="add_movie_success_message">New Movie Added!</string>
+    <string name="add_movie_failed_message">Movie Addition Failed!</string>
+    <string name="edit_movie_success_message">Movie Edited!</string>
+    <string name="edit_movie_failed_message">Movie Edition Failed!</string>
+    <string name="no_change_detected_message">No Changes Detected!!!</string>
+    <string name="movie_deleted_message">Movie deleted!</string>
+    <string name="movie_list_deleted_message">Movies Group Deleted!</string>
+    <string name="all_movies_deleted_message">All Movies Deleted!</string>
+    <string name="movies_back_message">Movies Returned!</string>
 </resources>
