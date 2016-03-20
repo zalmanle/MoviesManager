@@ -149,13 +149,12 @@ public class DbSearchActivity extends AppCompatActivity {
 
     private void restoreMovies() {
         if(garbageMoviesList != null){
+            results.addAll(garbageMoviesList);
+            handler.addMoviesList(garbageMoviesList);
             Movie.Helper.setMoviesOrder(results, this);
-            for(int i = 0;i < garbageMoviesList.size();i++){
-                results.add(garbageMoviesList.get(i));
-                handler.addMovie(garbageMoviesList.get(i));
-            }
             adapter.notifyDataSetChanged();
             setResult(RESULT_CANCELED);
+            info.displayInfoMessage(getString(R.string.movies_back_message));
         }
     }
     //endregion
@@ -401,16 +400,11 @@ public class DbSearchActivity extends AppCompatActivity {
     };
 
     private void deleteMovies() {
-        Movie movie;
-        if(results != null||results.size() > 0){
-            for(int i = 0;i < results.size();i++){
-                movie = results.get(i);
-                handler.deleteMovie(movie);
-                garbageMoviesList.add(movie);
-            }
-        }
+        garbageMoviesList.addAll(results);
+        handler.addMoviesList(results);
         results.clear();
         adapter.notifyDataSetChanged();
+        info.displayInfoMessage(getString(R.string.movie_list_deleted_message));
     }
     //endregion
 
@@ -447,6 +441,7 @@ public class DbSearchActivity extends AppCompatActivity {
         results.remove(position);
         garbageMoviesList.add(movie);
         adapter.notifyDataSetChanged();
+        info.displayInfoMessage(getString(R.string.movie_deleted_message));
     }
 
     private void appearRestoreMenuItem() {

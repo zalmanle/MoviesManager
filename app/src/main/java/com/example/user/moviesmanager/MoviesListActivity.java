@@ -208,11 +208,11 @@ public class MoviesListActivity extends AppCompatActivity
 
     private void restoreMovies() {
         if (garbageMoviesList != null) {
-            for (int i = 0; i < garbageMoviesList.size(); i++) {
-                moviesList.add(garbageMoviesList.get(i));
-                handler.addMovie(garbageMoviesList.get(i));
-            }
+
+            moviesList.addAll(garbageMoviesList);
+            handler.addMoviesList(garbageMoviesList);
             initMoviesList();
+            info.displayInfoMessage(getString(R.string.movies_back_message));
         }
     }
 
@@ -373,6 +373,7 @@ public class MoviesListActivity extends AppCompatActivity
         moviesList.remove(position);
         garbageMoviesList.add(movie);
         adapter.notifyDataSetChanged();
+        info.displayInfoMessage(getString(R.string.movie_deleted_message));
     }
 
     private void appearRestoreMenuItem() {
@@ -414,6 +415,7 @@ public class MoviesListActivity extends AppCompatActivity
         moviesList.clear();
         handler.deleteAllMovies();
         adapter.notifyDataSetChanged();
+        info.displayInfoMessage(getString(R.string.all_movies_deleted_message));
     }
     //endregion
 

@@ -14,6 +14,8 @@ import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -34,14 +36,16 @@ import com.example.user.moviesmanager.utilities.Utilities;
 
 import java.util.List;
 
-public class StoreMovieActivity extends AppCompatActivity implements OnDataReceivedListener {
+public class StoreMovieActivity extends AppCompatActivity
+                                implements OnDataReceivedListener,
+                                           TextWatcher {
 
     //region CONSTANTS
     private static final int ID_NO_EXIST_CODE = -1;
 
     private static final int MOVIE_POSITION = 0;
 
-    private static final String TAG = "Store Movies";
+    private static final String TAG = "TEST";
 
     private static final int WATCHED_POSITION = 0;
 
@@ -88,6 +92,10 @@ public class StoreMovieActivity extends AppCompatActivity implements OnDataRecei
     private AdvancedOptionsUserInfo info;
 
     String[]rates;
+
+    private boolean isStored;
+
+    private boolean isChanged = false;
     //endregion
 
     @Override
@@ -181,20 +189,49 @@ public class StoreMovieActivity extends AppCompatActivity implements OnDataRecei
     }
 
     private void storeMovie() {
+
         if (prepareMovieFromFields()) {
 
             if (isNewAddition) {
                 if (!handler.isMovieExist(movie)) {
-                    handler.addMovie(movie);
+                    storeMovie(true);
                 } else {
                     info.displayInfoMessage(getString(R.string.movie_exist_message));
                 }
 
             } else {
+                if(isChanged) {
+                    storeMovie(false);
+                }
+                else {
+                    info.displayInfoMessage(getString(R.string.no_change_detected_message));
+                    finish();
+                }
 
-                handler.editMovie(movie);
             }
             goBackWithResult();
+        }
+    }
+
+    private void storeMovie(boolean isNewAddition){
+        isStored = false;
+        if(isNewAddition){
+            isStored = handler.addMovie(movie);
+            if(isStored){
+               info.displayInfoMessage(getString(R.string.add_movie_success_message));
+            }
+            else {
+               info.displayInfoMessage(getString(R.string.add_movie_failed_message));
+            }
+        }
+        else {
+            isStored = handler.editMovie(movie);
+            if(isStored){
+               info.displayInfoMessage(getString(R.string.edit_movie_success_message));
+            }
+            else {
+               info.displayInfoMessage(getString(R.string.edit_movie_failed_message));
+            }
         }
     }
 
@@ -249,12 +286,16 @@ public class StoreMovieActivity extends AppCompatActivity implements OnDataRecei
 
         //initialize subject edit text
         subjectEditText = (EditText) findViewById(R.id.subject_edit_text);
+        subjectEditText.addTextChangedListener(this);
         //initialize body edit text
         bodyEditText = (EditText) findViewById(R.id.body_edit_text);
+        bodyEditText.addTextChangedListener(this);
         //initialize url edit text
         urlEditText = (EditText) findViewById(R.id.url_edit_text);
+        urlEditText.addTextChangedListener(this);
         //initialize year edit text
         yearEditText = (EditText)findViewById(R.id.year_edit_text);
+        yearEditText.addTextChangedListener(this);
         //initialize image view
         posterImageView = (ImageView)findViewById(R.id.movie_poster_image_view);
         registerForContextMenu(posterImageView);
@@ -317,6 +358,7 @@ public class StoreMovieActivity extends AppCompatActivity implements OnDataRecei
             bodyEditText.setText(movie.getBody());
             urlEditText.setText(movie.getImageUrl());
             yearEditText.setText(movie.getYear());
+            isChanged = false;
         }
     }
     //endregion
@@ -355,6 +397,7 @@ public class StoreMovieActivity extends AppCompatActivity implements OnDataRecei
             }
             else if(Utilities.Helper.isValidImageName(data)){
                 storeImageByFileName(data);
+                isChanged = true;
             }
             else {
 
@@ -451,12 +494,13 @@ public class StoreMovieActivity extends AppCompatActivity implements OnDataRecei
     //region BACK FUNCTION
     private void goBackWithResult(){
         Intent intent;
-        if((sender == null)&&(isNewAddition)){
+        if(isStored){
+            if((sender == null)&&(isNewAddition)){
 
-            setResult(RESULT_OK);
-            finish();
-        }
-        else {
+                setResult(RESULT_OK);
+                finish();
+            }
+            else {
                 if(sender.equals(Constants.MOVIES_LIST_PAGE)){
 
                     setResult(RESULT_OK);
@@ -468,8 +512,8 @@ public class StoreMovieActivity extends AppCompatActivity implements OnDataRecei
                     setResult(RESULT_OK,intent);
                     finish();
                 }
+            }
         }
-
     }
     //endregion
 
@@ -517,6 +561,7 @@ public class StoreMovieActivity extends AppCompatActivity implements OnDataRecei
             switch (which){
                 case WATCHED_POSITION:
                     watched = true;
+                    isChanged = true;
                     break;
                 case ADD_RATE_POSITION:
                     info.showRatesDialog(ratesListener);
@@ -539,6 +584,7 @@ public class StoreMovieActivity extends AppCompatActivity implements OnDataRecei
         @Override
         public void onClick(DialogInterface dialog, int which) {
             movieRate = Integer.parseInt(rates[which]);
+            isChanged = true;
         }
     };
     //endregion
@@ -583,4 +629,18 @@ public class StoreMovieActivity extends AppCompatActivity implements OnDataRecei
     }
 
 
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+        isChanged = true;
+    }
 }
