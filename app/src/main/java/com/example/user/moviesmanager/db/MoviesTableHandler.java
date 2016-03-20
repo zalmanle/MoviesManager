@@ -227,6 +227,25 @@ public class MoviesTableHandler {
     }
     //endregion
 
+    //region DELETE MOVIES LIST
+    public void deleteMoviesList(List<Movie>list){
+        if((list != null)&&(!list.isEmpty())){
+            for(Movie movie:list){
+                deleteMovie(movie);
+            }
+        }
+    }
+    //endregion
+
+    //region DELETE MOVIES LIST
+    public void addMoviesList(List<Movie>list){
+        if((list != null)&&(!list.isEmpty())){
+            for(Movie movie:list){
+                addMovie(movie);
+            }
+        }
+    }
+    //endregion
     //region DELETE ALL MOVIES METHOD
 
     /**
