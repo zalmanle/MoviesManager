@@ -34,7 +34,7 @@ public class LoadMoviesTask extends AsyncTask<String,Integer,List<Movie>> {
     //endregion
 
     //region CONSTRUCTOR
-    public LoadMoviesTask(ProgressBar progressBar,OnDataReceivedListener listener){
+    LoadMoviesTask(ProgressBar progressBar,OnDataReceivedListener listener){
         this.progressBar = progressBar;
         this.listener = listener;
     }

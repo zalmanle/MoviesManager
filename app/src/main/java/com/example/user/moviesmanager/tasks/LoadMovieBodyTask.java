@@ -36,7 +36,7 @@ public class LoadMovieBodyTask  extends AsyncTask<Movie,Integer,Movie>{
     //endregion
 
     //region CONSTRUCTOR
-    public LoadMovieBodyTask(ProgressBar progressBar,OnDataReceivedListener listener){
+    LoadMovieBodyTask(ProgressBar progressBar,OnDataReceivedListener listener){
         this.progressBar = progressBar;
         this.listener = listener;
     }
