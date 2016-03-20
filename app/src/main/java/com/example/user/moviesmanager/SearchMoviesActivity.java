@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.example.user.moviesmanager.customadapter.MoviesAdapter;
 import com.example.user.moviesmanager.data.Movie;
+import com.example.user.moviesmanager.info.InfoFactory;
 import com.example.user.moviesmanager.info.UserInfo;
 import com.example.user.moviesmanager.tasks.LoadMoviesTask;
 import com.example.user.moviesmanager.tasks.OnDataReceivedListener;
@@ -67,7 +68,7 @@ public class SearchMoviesActivity extends AppCompatActivity
         setContentView(R.layout.activity_search_movies);
         //set ui elements
         setUIElements();
-        info = new UserInfo(this);
+        info = InfoFactory.getInfo(InfoFactory.USER_INFO,this);
     }
 
     @Override

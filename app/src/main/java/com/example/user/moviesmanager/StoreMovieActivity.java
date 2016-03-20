@@ -29,6 +29,7 @@ import com.example.user.moviesmanager.data.DataConstants;
 import com.example.user.moviesmanager.data.Movie;
 import com.example.user.moviesmanager.db.MoviesTableHandler;
 import com.example.user.moviesmanager.info.AdvancedOptionsUserInfo;
+import com.example.user.moviesmanager.info.InfoFactory;
 import com.example.user.moviesmanager.tasks.LoadMovieBodyTask;
 import com.example.user.moviesmanager.tasks.OnDataReceivedListener;
 import com.example.user.moviesmanager.tasks.TasksFactory;
@@ -108,7 +109,7 @@ public class StoreMovieActivity extends AppCompatActivity
         handler = new MoviesTableHandler(this);
         //initialize ui elements
         initUIElements();
-        info = new AdvancedOptionsUserInfo(this);
+        info = (AdvancedOptionsUserInfo) InfoFactory.getInfo(InfoFactory.ADVANCED_OPTIONS_USER_INFO,this);
         rates = getResources().getStringArray(R.array.rates);
 
 

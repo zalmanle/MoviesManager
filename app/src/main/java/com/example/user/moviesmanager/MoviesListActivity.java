@@ -25,6 +25,7 @@ import com.example.user.moviesmanager.customadapter.MoviesAdapter;
 import com.example.user.moviesmanager.data.Movie;
 import com.example.user.moviesmanager.db.MoviesContract;
 import com.example.user.moviesmanager.db.MoviesTableHandler;
+import com.example.user.moviesmanager.info.InfoFactory;
 import com.example.user.moviesmanager.info.MoviesUserInfo;
 import com.example.user.moviesmanager.utilities.Constants;
 import com.example.user.moviesmanager.utilities.Utilities;
@@ -73,7 +74,7 @@ public class MoviesListActivity extends AppCompatActivity
         //set ui elements
         setUIElements();
 
-        info = new MoviesUserInfo(this);
+        info = (MoviesUserInfo) InfoFactory.getInfo(InfoFactory.MOVIES_USER_INFO,this);
         //initialize garb age movie list
         garbageMoviesList = new ArrayList<Movie>();
         //initialize db handler

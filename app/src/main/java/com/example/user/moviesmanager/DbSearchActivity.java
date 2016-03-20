@@ -26,6 +26,7 @@ import android.widget.TextView;
 import com.example.user.moviesmanager.customadapter.MoviesAdapter;
 import com.example.user.moviesmanager.data.Movie;
 import com.example.user.moviesmanager.db.MoviesTableHandler;
+import com.example.user.moviesmanager.info.InfoFactory;
 import com.example.user.moviesmanager.info.MoviesUserInfo;
 import com.example.user.moviesmanager.utilities.Constants;
 import com.example.user.moviesmanager.utilities.Utilities;
@@ -83,7 +84,7 @@ public class DbSearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_db_search);
         handler = new MoviesTableHandler(this);
-        info = new MoviesUserInfo(this);
+        info = (MoviesUserInfo) InfoFactory.getInfo(InfoFactory.MOVIES_USER_INFO,this);
         //initialize garb age movie list
         garbageMoviesList = new ArrayList<Movie>();
         initUIElements();
