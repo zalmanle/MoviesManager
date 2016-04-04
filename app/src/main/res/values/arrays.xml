@@ -70,5 +70,15 @@
         <item>Year</item>
         <item>Fragment Of Subject</item>
     </string-array>
+    <string-array name="or_and">
+        <item>Signs</item>
+        <item>OR</item>
+        <item>AND</item>
+    </string-array>
+    <string-array name="equals_like">
+        <item>Signs</item>
+        <item>=</item>
+        <item>like</item>
+    </string-array>
 
 </resources>

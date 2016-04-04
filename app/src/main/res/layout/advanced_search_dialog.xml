@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="@android:color/white"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/spinner_container"
+        android:layout_width="250dp"
+        android:layout_height="100dp"
+        android:orientation="horizontal">
+
+        <Spinner
+            android:id="@+id/columns_spinner"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2" />
+        <Spinner
+            android:id="@+id/and_or_spinner"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+        <Spinner
+            android:id="@+id/equals_like_spinner"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+    </LinearLayout>
+    <EditText
+        android:layout_below="@id/spinner_container"
+        android:id="@+id/advanced_search_edit"
+        android:layout_width="150dp"
+        android:layout_height="100dp" />
+    <Button
+        android:layout_below="@id/spinner_container"
+        android:layout_toRightOf="@id/advanced_search_edit"
+        android:id="@+id/advanced_clear_button"
+        android:text="@string/clear_button_text"
+        android:layout_width="100dp"
+        android:layout_height="100dp" />
+
+</RelativeLayout>

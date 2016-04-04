@@ -97,4 +97,6 @@
     <string name="movie_list_deleted_message">Movies Group Deleted!</string>
     <string name="all_movies_deleted_message">All Movies Deleted!</string>
     <string name="movies_back_message">Movies Returned!</string>
+    <string name="clear_button_text">Clear</string>
+    <string name="invalid_query_message">Invalid Query</string>
 </resources>
