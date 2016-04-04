@@ -11,6 +11,8 @@ public class InfoFactory {
 
     public static final String MOVIES_USER_INFO = "movies user";
 
+    public static final String ADVANCED_MOVIES_USER_INFO = "advanced movies user";
+
     public static final String ADVANCED_OPTIONS_USER_INFO = "advanced options user";
     //endregion
 
@@ -24,6 +26,9 @@ public class InfoFactory {
         }
         else if(flag.equals(ADVANCED_OPTIONS_USER_INFO)){
             info = new AdvancedOptionsUserInfo(context);
+        }
+        else if(flag.equals(ADVANCED_MOVIES_USER_INFO)){
+            info = new AdvancedMoviesUserInfo(context);
         }
         return info;
     }

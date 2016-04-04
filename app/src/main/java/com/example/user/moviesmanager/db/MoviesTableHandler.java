@@ -20,7 +20,7 @@ import java.util.List;
 public class MoviesTableHandler {
 
     //region CONSTANTS
-    private static final String TAG = "22:MoviesTableHandler";
+    private static final String TAG = "TEST";
     //endregion
 
     //region INSTANCE VARIABLES
@@ -154,7 +154,7 @@ public class MoviesTableHandler {
             clauseString = MoviesDBConstants.SUBJECT + "=?";
             params = new String[] {subject};
             //execute query
-            Cursor cursor = database.query(MoviesDBConstants.TABLE_NAME,null,clauseString,params,null,null, DataConstants.SUBJECT);
+            Cursor cursor = database.query(MoviesDBConstants.TABLE_NAME, null, clauseString, params, null, null, DataConstants.SUBJECT);
             //get data and convert it
             list = getCursorData(cursor);
         }
@@ -188,6 +188,36 @@ public class MoviesTableHandler {
         }
         return list;
     }
+    //endregion
+    //region GET MOVIE BY SUBJECT
+    public List<Movie> execQuery(String query) {
+
+        database = dbHelper.getReadableDatabase();
+        List<Movie>list = null;
+        Cursor cursor = null;
+        try {
+
+            ParamsBuilder builder = new ParamsBuilder(query);
+            builder.preparePatterns();
+            clauseString = builder.getClauseString();
+            params = builder.getParams();
+
+            //execute query
+            cursor = database.query(MoviesDBConstants.TABLE_NAME, null, clauseString, params, null, null, DataConstants.SUBJECT);
+
+            //get data and convert it
+            list = getCursorData(cursor);
+        }
+        catch (Exception e){
+            Log.d(TAG,e.getMessage());
+        }
+        finally {
+            database.close();
+        }
+        return list;
+    }
+
+
     //endregion
     //region DELETE MOVIE METHOD
 
@@ -314,7 +344,7 @@ public class MoviesTableHandler {
         //if is watched true assign 1 otherwise 0
         int watched = (movie.isWatched() == true ? 1:0);
         values.put(MoviesDBConstants.WATCHED,watched);
-        values.put(MoviesDBConstants.DATE,movie.getYear());
+        values.put(MoviesDBConstants.DATE, movie.getYear());
         return values;
     }
     //endregion
@@ -403,6 +433,86 @@ public class MoviesTableHandler {
             return false;
         }
     }
+    //endregion
+
+    //region BUILD QUERY CLASS
+    private class ParamsBuilder {
+
+        //region Constants
+        private static final String OR_SEPARATOR = "OR";
+
+        private static final String AND_SEPARATOR = "AND";
+
+        private static final String SEPARATOR = ":";
+
+        private static final String LIKE = "like";
+
+        private static final String EQUALS = "=";
+
+        private static final String SIGN = "? ";
+        //endregion
+        //region Instance Variables
+        private String query;
+
+        private String[]patterns;
+        //endregion
+
+        //region Constructor
+        private ParamsBuilder(String query){
+            this.query = query;
+        }
+        //endregion
+        private void preparePatterns(){
+            String temp = query;
+            temp = temp.replace(OR_SEPARATOR,SEPARATOR).replace(AND_SEPARATOR,SEPARATOR);
+            patterns = temp.split(SEPARATOR);
+        }
+
+        private String[]getParams(){
+            String[]params = new String[patterns.length];
+            String param;
+            int index;
+            for(int i = 0;i < patterns.length;i++){
+
+                if(patterns[i].contains(LIKE)){
+                    index = patterns[i].indexOf(LIKE);
+                    param = "%" + patterns[i].substring(index + 4).trim() + "%";
+                    params[i] = param;
+                }
+                else if(patterns[i].contains(EQUALS)){
+                    index = patterns[i].indexOf(EQUALS);
+                    param = patterns[i].substring(index + 2);
+                    params[i] = param;
+                }
+            }
+            return params;
+        }
+
+        private String getClauseString(){
+
+            String param;
+            String clauseStr = query;
+            int index;
+            String pattern;
+            for(int i = 0;i < patterns.length;i++){
+
+                if(patterns[i].contains(LIKE)){
+                    index = patterns[i].indexOf(LIKE);
+                    param = patterns[i].substring(index + 4);
+                    clauseStr = clauseStr.replace(param,SIGN);
+                }
+                else if(patterns[i].contains(EQUALS)){
+                    index = patterns[i].indexOf(EQUALS);
+                    param = patterns[i].substring(index + 1);
+                    clauseStr = clauseStr.replace(param, SIGN);
+                }
+
+            }
+            return clauseStr;
+        }
+
+    }
+
     //endregion
     //endregion
 

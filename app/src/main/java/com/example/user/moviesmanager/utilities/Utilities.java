@@ -53,6 +53,8 @@ public class Utilities {
     private static final int RADIUS = 70;
 
     private static final int MARGIN = 10;
+
+    private static final String QUERY_PATTERN = "((subject|body|image_url|watched|rate|date)(\\s)(=|like)(((\\s)(\\w+))+)(\\s?))?((or|and|OR|AND)(\\s)(subject|body|image_url|watched|rate|date)(\\s)(=|like)(((\\s)(\\w+))+)(\\s?))*";
     //endregion
 
 
@@ -67,6 +69,22 @@ public class Utilities {
 
             Pattern pattern = Pattern.compile(IMAGE_PATTERN);
             Matcher matcher = pattern.matcher(imageName);
+            return matcher.matches();
+        }
+        //endregion
+
+        /**
+         * This function validate image name
+         */
+        public static boolean isValidSearchQuery(String queryStr) {
+
+            //check if query is empty
+            if(TextUtils.isEmpty(queryStr)){
+                return false;
+            }
+
+            Pattern pattern = Pattern.compile(QUERY_PATTERN);
+            Matcher matcher = pattern.matcher(queryStr);
             return matcher.matches();
         }
         //endregion

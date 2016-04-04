@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -26,15 +27,15 @@ import android.widget.TextView;
 import com.example.user.moviesmanager.customadapter.MoviesAdapter;
 import com.example.user.moviesmanager.data.Movie;
 import com.example.user.moviesmanager.db.MoviesTableHandler;
+import com.example.user.moviesmanager.info.AdvancedMoviesUserInfo;
 import com.example.user.moviesmanager.info.InfoFactory;
-import com.example.user.moviesmanager.info.MoviesUserInfo;
 import com.example.user.moviesmanager.utilities.Constants;
 import com.example.user.moviesmanager.utilities.Utilities;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class DbSearchActivity extends AppCompatActivity {
+public class DbSearchActivity extends AppCompatActivity implements View.OnClickListener{
 
     //region Constants
     private static final int SUBJECT_SEARCH_OPTION = 0;
@@ -73,18 +74,20 @@ public class DbSearchActivity extends AppCompatActivity {
 
     private MenuItem restoreMenuItem;
 
-    private MoviesUserInfo info;
+    private AdvancedMoviesUserInfo info;
 
     private ImageView shareImageContainer;
 
     private int selectedPosition;
+
+    private FloatingActionButton advancedSearchBtn;
     //endregion
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_db_search);
         handler = new MoviesTableHandler(this);
-        info = (MoviesUserInfo) InfoFactory.getInfo(InfoFactory.MOVIES_USER_INFO,this);
+        info = (AdvancedMoviesUserInfo) InfoFactory.getInfo(InfoFactory.ADVANCED_MOVIES_USER_INFO,this);
         //initialize garb age movie list
         garbageMoviesList = new ArrayList<Movie>();
         initUIElements();
@@ -205,12 +208,18 @@ public class DbSearchActivity extends AppCompatActivity {
         initDBOptionsSpinner();
         initDBSearchEditText();
         initDBResultList();
+        initAdvancedSearchBtn();
 
         //set back button
         ActionBar bar = getSupportActionBar();
         bar.setLogo(R.drawable.back_icon);
         bar.setDisplayHomeAsUpEnabled(true);
 
+    }
+
+    private void initAdvancedSearchBtn() {
+        advancedSearchBtn = (FloatingActionButton)findViewById(R.id.show_advanced_search_button);
+        advancedSearchBtn.setOnClickListener(this);
     }
 
     private void initDBResultList() {
@@ -485,6 +494,45 @@ public class DbSearchActivity extends AppCompatActivity {
             }
         }
     };
+
+    @Override
+    public void onClick(View v) {
+        info.showAdvancedSearchDialog(advancedSearchListener);
+    }
+
+    DialogInterface.OnClickListener advancedSearchListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            if(dialog instanceof AlertDialog){
+                AlertDialog alertDialog = (AlertDialog)dialog;
+                EditText editText = (EditText) alertDialog.findViewById(R.id.advanced_search_edit);
+                String searchStr = editText.getText().toString();
+                execSearch(searchStr);
+            }
+
+        }
+    };
+
+    private void execSearch(String searchStr) {
+        if (!TextUtils.isEmpty(searchStr)) {
+            if (Utilities.Helper.isValidSearchQuery(searchStr)) {
+
+                List<Movie> list = handler.execQuery(searchStr);
+                if (list == null) {
+                    info.displayLogMessage(getString(R.string.not_movie_found_message));
+                    return;
+                }
+                else {
+                    updateResultsList(list);
+                }
+
+
+            } else {
+                info.displayLogMessage(getString(R.string.invalid_query_message));
+            }
+        }
+    }
+
     //endregion
 
 }

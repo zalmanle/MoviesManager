@@ -19,11 +19,23 @@ public class DataConstants {
 
     public static final String RATE = "rate";
 
-    public static final String YEAR = "year";
+    public static final String YEAR = "date";
     //endregion
 
     //region Error messages
     public static final String EMPTY_SUBJECT_MESSAGE = "empty subject string";
     //endregion
+
+    public static final String[]COLUMNS =
+            {
+                    "Columns",
+                    SUBJECT,
+                    BODY,
+                    IMAGE_URL,
+                    WATCHED,
+                    RATE,
+                    YEAR
+            };
+
 
 }
