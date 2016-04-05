@@ -508,14 +508,26 @@ public class DbSearchActivity extends AppCompatActivity implements View.OnClickL
                 EditText editText = (EditText) alertDialog.findViewById(R.id.advanced_search_edit);
                 String searchStr = editText.getText().toString();
                 execSearch(searchStr);
+                //testSearch(searchStr);
             }
 
         }
     };
 
+    private void testSearch(String searchStr){
+        List<Movie> list = handler.execQuery(searchStr);
+        if (list == null) {
+            info.displayLogMessage(getString(R.string.not_movie_found_message));
+            return;
+        }
+        else {
+            updateResultsList(list);
+        }
+    }
     private void execSearch(String searchStr) {
         if (!TextUtils.isEmpty(searchStr)) {
             if (Utilities.Helper.isValidSearchQuery(searchStr)) {
+
 
                 List<Movie> list = handler.execQuery(searchStr);
                 if (list == null) {

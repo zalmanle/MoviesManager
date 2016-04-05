@@ -79,6 +79,8 @@
         <item>Signs</item>
         <item>=</item>
         <item>like</item>
+        <item>(</item>
+        <item>)</item>
     </string-array>
 
 </resources>

@@ -54,7 +54,9 @@ public class Utilities {
 
     private static final int MARGIN = 10;
 
-    private static final String QUERY_PATTERN = "((subject|body|image_url|watched|rate|date)(\\s)(=|like)(((\\s)(\\w+))+)(\\s?))?((or|and|OR|AND)(\\s)(subject|body|image_url|watched|rate|date)(\\s)(=|like)(((\\s)(\\w+))+)(\\s?))*";
+    private static final String QUERY_PATTERN = "(((\\s)(\\()(\\s))?(subject|body|image_url|watched|rate|date)(\\s)(=|like)(((\\s)(\\w+))+((\\s)(\\))(\\s))?)(\\s?))?((or|and|OR|AND)(\\s)((\\s)(\\()(\\s))?(subject|body|image_url|watched|rate|date)(\\s)(=|like)(((\\s)(\\w+))+)((\\s)(\\))(\\s))?(\\s?))*";
+
+    //private static final String QUERY_PATTERN = "((subject|body|image_url|watched|rate|date)(\\s)(=|like)(((\\s)(\\w+))+)(\\s?))?((or|and|OR|AND)(\\s)(subject|body|image_url|watched|rate|date)(\\s)(=|like)(((\\s)(\\w+))+)(\\s?))*";
     //endregion
 
 

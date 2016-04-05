@@ -10,6 +10,7 @@ import android.util.Log;
 
 import com.example.user.moviesmanager.data.DataConstants;
 import com.example.user.moviesmanager.data.Movie;
+import com.example.user.moviesmanager.utilities.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -449,7 +450,13 @@ public class MoviesTableHandler {
 
         private static final String EQUALS = "=";
 
-        private static final String SIGN = "? ";
+        private static final String LIKE_SIGN = " like? ";
+
+        private static final String EQUALS_SIGN = " =?";
+
+        private static final String OPEN_SIGN = "(";
+
+        private static final String CLOSE_SIGN = ")";
         //endregion
         //region Instance Variables
         private String query;
@@ -465,6 +472,7 @@ public class MoviesTableHandler {
         private void preparePatterns(){
             String temp = query;
             temp = temp.replace(OR_SEPARATOR,SEPARATOR).replace(AND_SEPARATOR,SEPARATOR);
+            temp = temp.replace(OPEN_SIGN, Constants.EMPTY_STRING).replace(CLOSE_SIGN,Constants.EMPTY_STRING);
             patterns = temp.split(SEPARATOR);
         }
 
@@ -477,12 +485,12 @@ public class MoviesTableHandler {
                 if(patterns[i].contains(LIKE)){
                     index = patterns[i].indexOf(LIKE);
                     param = "%" + patterns[i].substring(index + 4).trim() + "%";
-                    params[i] = param;
+                    params[i] = param.trim();
                 }
                 else if(patterns[i].contains(EQUALS)){
                     index = patterns[i].indexOf(EQUALS);
                     param = patterns[i].substring(index + 2);
-                    params[i] = param;
+                    params[i] = param.trim();
                 }
             }
             return params;
@@ -496,15 +504,17 @@ public class MoviesTableHandler {
             String pattern;
             for(int i = 0;i < patterns.length;i++){
 
+                patterns[i] = patterns[i].trim();
                 if(patterns[i].contains(LIKE)){
                     index = patterns[i].indexOf(LIKE);
-                    param = patterns[i].substring(index + 4);
-                    clauseStr = clauseStr.replace(param,SIGN);
+                    param = patterns[i].substring(index - 1,patterns[i].length());
+                    clauseStr = clauseStr.replace(param,LIKE_SIGN);
                 }
                 else if(patterns[i].contains(EQUALS)){
+
                     index = patterns[i].indexOf(EQUALS);
-                    param = patterns[i].substring(index + 1);
-                    clauseStr = clauseStr.replace(param, SIGN);
+                    param = patterns[i].substring(index - 1,patterns[i].length());
+                    clauseStr = clauseStr.replace(param,EQUALS_SIGN);
                 }
 
             }
@@ -512,7 +522,6 @@ public class MoviesTableHandler {
         }
 
     }
-
     //endregion
     //endregion
 
