@@ -39,6 +39,7 @@
             android:icon="@android:color/transparent"
             android:label="@string/db_search_label_text"
             android:theme="@style/AppTheme.Base.SecondaryPages"/>
+
         <activity
             android:name=".AppPrefsActivity"
             android:label="@string/preferences_label_text"/>
