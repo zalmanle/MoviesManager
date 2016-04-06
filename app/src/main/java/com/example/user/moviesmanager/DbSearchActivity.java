@@ -132,11 +132,19 @@ public class DbSearchActivity extends AppCompatActivity implements View.OnClickL
                 disappearRestoreMenuItem();
                 restoreMovies();
                 break;
+            case R.id.clear_movies_list_item:
+                clearMoviesList();
+                break;
             case android.R.id.home:
                 finish();
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void clearMoviesList() {
+        results.clear();
+        adapter.notifyDataSetChanged();
     }
 
     private void goToPreferencesScreen() {
@@ -169,6 +177,8 @@ public class DbSearchActivity extends AppCompatActivity implements View.OnClickL
         MenuItem item= menu.findItem(R.id.db_search_settings_item);
         item.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS);
         item= menu.findItem(R.id.db_search_remove_all_movies_item);
+        item.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        item = menu.findItem(R.id.clear_movies_list_item);
         item.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
         return true;

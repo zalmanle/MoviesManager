@@ -17,4 +17,9 @@
         android:icon="@drawable/restore_icon"
         android:title="@string/restore_item_text"/>
 
+    <item
+        android:title="@string/settings_item_text"
+        android:id="@+id/clear_movies_list_item"
+        android:icon="@drawable/clear_list_icon"/>
+
 </menu>
