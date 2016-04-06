@@ -163,7 +163,7 @@ public class DbSearchActivity extends AppCompatActivity implements View.OnClickL
         if(garbageMoviesList != null){
             results.addAll(garbageMoviesList);
             handler.addMoviesList(garbageMoviesList);
-            Movie.Helper.setMoviesOrder(results, this);
+            Utilities.MovieHelper.setMoviesOrder(results, this);
             adapter.notifyDataSetChanged();
             setResult(RESULT_CANCELED);
             info.displayInfoMessage(getString(R.string.movies_back_message));
@@ -387,7 +387,7 @@ public class DbSearchActivity extends AppCompatActivity implements View.OnClickL
     private void updateResultsList(List<Movie>movies) {
         results.clear();
         results.addAll(movies);
-        Movie.Helper.setMoviesOrder(results, this);
+        Utilities.MovieHelper.setMoviesOrder(results, this);
         adapter.notifyDataSetChanged();
     }
     //endregion

@@ -427,7 +427,7 @@ public class MoviesListActivity extends AppCompatActivity
         moviesList = handler.getAllMovies();
 
         if ((moviesList != null)) {
-            Movie.Helper.setMoviesOrder(moviesList, this);
+            Utilities.MovieHelper.setMoviesOrder(moviesList, this);
             adapter = new MoviesAdapter(this, R.layout.movies_list_item, moviesList);
             moviesListView.setAdapter(adapter);
         }
@@ -472,7 +472,7 @@ public class MoviesListActivity extends AppCompatActivity
     }
 
     private void initAdapter() {
-        Movie.Helper.setMoviesOrder(moviesList, this);
+        Utilities.MovieHelper.setMoviesOrder(moviesList, this);
         adapter = new MoviesAdapter(this, R.layout.movies_list_item, moviesList);
         moviesListView.setAdapter(adapter);
     }

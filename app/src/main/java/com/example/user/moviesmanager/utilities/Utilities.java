@@ -3,6 +3,7 @@ package com.example.user.moviesmanager.utilities;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -10,6 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
@@ -24,6 +26,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.user.moviesmanager.DbSearchActivity;
+import com.example.user.moviesmanager.MoviesListActivity;
+import com.example.user.moviesmanager.R;
+import com.example.user.moviesmanager.SearchMoviesActivity;
 import com.example.user.moviesmanager.StoreMovieActivity;
 import com.example.user.moviesmanager.data.DataConstants;
 import com.example.user.moviesmanager.data.Movie;
@@ -34,6 +40,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -443,6 +452,78 @@ public class Utilities {
                 view = new View(activity);
             }
             inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+        //endregion
+    }
+    //endregion
+    //region CLASS DATA HELPER
+    public static class MovieHelper {
+        //region SORTING FUNCTIONS
+        public static void setMoviesOrder(List<Movie> list,Context context){
+            int orderValue = getOrderValue(context);
+            switch(orderValue){
+                case Constants.EMPTY_ORDER_CODE:
+                case Constants.BY_INSERT_ORDER_CODE:
+                    break;
+                case Constants.SUBJECT_ORDER_CODE:
+                    sortMoviesListBySubject(list);
+                    break;
+                case Constants.ASCENDING_YEAR_CODE:
+                    sortMoviesListByYear(list,Constants.ASC_YEAR_ORDER);
+                    break;
+                case Constants.DESCENDING_YEAR_CODE:
+                    sortMoviesListByYear(list,Constants.DESC_YEAR_ORDER);
+                    break;
+            }
+
+        }
+        private static int getOrderValue(Context context){
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+            String key = null;
+            String valueStr;
+            int value;
+            //get preferences key
+            if(context instanceof MoviesListActivity){
+                key = context.getString(R.string.movies_list_order_list_key);
+            }
+            else if(context instanceof SearchMoviesActivity){
+                key = context.getString(R.string.web_search_order_list_key);
+            }
+            else if(context instanceof DbSearchActivity){
+                key = context.getString(R.string.db_search_order_list_key);
+            }
+            //return value of order preferences list
+            if(key.equals(Constants.EMPTY_STRING)){
+                return Constants.EMPTY_ORDER_CODE;
+            }
+            else {
+                valueStr = prefs.getString(key, Constants.BY_INSERT_ORDER_CODE_STRING);
+                value = Integer.parseInt(valueStr);
+                return value;
+            }
+
+        }
+        private static void sortMoviesListBySubject(List<Movie>list){
+
+            Comparator<Movie> comparator = new Comparator<Movie>() {
+                @Override
+                public int compare(Movie lhs, Movie rhs) {
+                    return lhs.getSubject().compareToIgnoreCase(rhs.getSubject());
+                }
+            };
+            Collections.sort(list, comparator);
+        }
+
+        private static void sortMoviesListByYear(List<Movie>list, final String yearOrder){
+            Comparator<Movie>comparator = new Comparator<Movie>() {
+                @Override
+                public int compare(Movie lhs, Movie rhs) {
+                    int lYear = Integer.parseInt(lhs.getYear());
+                    int rYear = Integer.parseInt(rhs.getYear());
+                    return yearOrder.equals(Constants.DESC_YEAR_ORDER)? rYear - lYear:lYear - rYear;
+                }
+            };
+            Collections.sort(list, comparator);
         }
         //endregion
     }

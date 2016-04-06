@@ -367,74 +367,7 @@ public class Movie implements Parcelable{
             return true;
         }
         //endregion
-        //region SORTING FUNCTIONS
-        public static void setMoviesOrder(List<Movie> list,Context context){
-            int orderValue = getOrderValue(context);
-            switch(orderValue){
-                case Constants.EMPTY_ORDER_CODE:
-                case Constants.BY_INSERT_ORDER_CODE:
-                    break;
-                case Constants.SUBJECT_ORDER_CODE:
-                    sortMoviesListBySubject(list);
-                    break;
-                case Constants.ASCENDING_YEAR_CODE:
-                    sortMoviesListByYear(list,Constants.ASC_YEAR_ORDER);
-                    break;
-                case Constants.DESCENDING_YEAR_CODE:
-                    sortMoviesListByYear(list,Constants.DESC_YEAR_ORDER);
-                    break;
-            }
 
-        }
-        private static int getOrderValue(Context context){
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-            String key = null;
-            String valueStr;
-            int value;
-            //get preferences key
-            if(context instanceof MoviesListActivity){
-                key = context.getString(R.string.movies_list_order_list_key);
-            }
-            else if(context instanceof SearchMoviesActivity){
-                key = context.getString(R.string.web_search_order_list_key);
-            }
-            else if(context instanceof DbSearchActivity){
-                key = context.getString(R.string.db_search_order_list_key);
-            }
-            //return value of order preferences list
-            if(key.equals(Constants.EMPTY_STRING)){
-                return Constants.EMPTY_ORDER_CODE;
-            }
-            else {
-                valueStr = prefs.getString(key, Constants.BY_INSERT_ORDER_CODE_STRING);
-                value = Integer.parseInt(valueStr);
-                return value;
-            }
-
-        }
-        private static void sortMoviesListBySubject(List<Movie>list){
-
-            Comparator<Movie> comparator = new Comparator<Movie>() {
-                @Override
-                public int compare(Movie lhs, Movie rhs) {
-                    return lhs.getSubject().compareToIgnoreCase(rhs.getSubject());
-                }
-            };
-            Collections.sort(list, comparator);
-        }
-
-        private static void sortMoviesListByYear(List<Movie>list, final String yearOrder){
-            Comparator<Movie>comparator = new Comparator<Movie>() {
-                @Override
-                public int compare(Movie lhs, Movie rhs) {
-                    int lYear = Integer.parseInt(lhs.getYear());
-                    int rYear = Integer.parseInt(rhs.getYear());
-                    return yearOrder.equals(Constants.DESC_YEAR_ORDER)? rYear - lYear:lYear - rYear;
-                }
-            };
-            Collections.sort(list, comparator);
-        }
-        //endregion
     }
     //endregion
     //endregion

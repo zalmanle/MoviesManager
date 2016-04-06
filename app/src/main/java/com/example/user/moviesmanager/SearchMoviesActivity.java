@@ -148,7 +148,7 @@ public class SearchMoviesActivity extends AppCompatActivity
     private void updateResultsList(List<Movie> movies) {
         resultsList.clear();
         resultsList.addAll(movies);
-        Movie.Helper.setMoviesOrder(resultsList, this);
+        Utilities.MovieHelper.setMoviesOrder(resultsList, this);
         adapter.notifyDataSetChanged();
     }
 
