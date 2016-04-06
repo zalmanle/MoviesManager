@@ -44,7 +44,16 @@ public class AdvancedMoviesUserInfo extends MoviesUserInfo {
             clearBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    String text = advancedSearchET.getText().toString();
+                    text = text.substring(0,text.length() - 1);
+                    advancedSearchET.setText(text);
+                }
+            });
+            clearBtn.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
                     advancedSearchET.setText(Constants.EMPTY_STRING);
+                    return true;
                 }
             });
 

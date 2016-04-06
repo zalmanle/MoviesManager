@@ -56,6 +56,7 @@ public class Utilities {
 
     private static final String QUERY_PATTERN = "(((\\s)(\\()(\\s))?(subject|body|image_url|watched|rate|date)(\\s)(=|like)(((\\s)(\\w+))+((\\s)(\\))(\\s))?)(\\s?))?((or|and|OR|AND)(\\s)((\\s)(\\()(\\s))?(subject|body|image_url|watched|rate|date)(\\s)(=|like)(((\\s)(\\w+))+)((\\s)(\\))(\\s))?(\\s?))*";
 
+    //check params without brackets
     //private static final String QUERY_PATTERN = "((subject|body|image_url|watched|rate|date)(\\s)(=|like)(((\\s)(\\w+))+)(\\s?))?((or|and|OR|AND)(\\s)(subject|body|image_url|watched|rate|date)(\\s)(=|like)(((\\s)(\\w+))+)(\\s?))*";
     //endregion
 

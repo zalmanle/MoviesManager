@@ -37,7 +37,7 @@
         android:layout_below="@id/spinner_container"
         android:layout_toRightOf="@id/advanced_search_edit"
         android:id="@+id/advanced_clear_button"
-        android:text="@string/clear_button_text"
+        android:background="@drawable/clear_list_icon_two"
         android:layout_width="100dp"
         android:layout_height="100dp" />
 
