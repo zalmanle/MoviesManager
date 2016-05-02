@@ -47,6 +47,7 @@ public class MoviesProvider extends ContentProvider {
     @Override
     public boolean onCreate() {
 
+        //on emulator of android studio not work
         android.os.Process.getThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
 
         helper = new MoviesDBHelper(getContext());
