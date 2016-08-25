@@ -29,6 +29,12 @@ public class AppPrefsActivity extends PreferenceActivity
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        getPreferenceManager().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         isChanged = true;
     }
