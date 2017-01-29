@@ -127,8 +127,8 @@ public class Utilities {
         //endregion
 
 
-        //region GET FILE NAME FROM URL
         public static String getFileNameFromURL(String url) {
+        //region GET FILE NAME FROM URL
             String fileNameWithExtension = null;
             if (URLUtil.isValidUrl(url)) {
                 fileNameWithExtension = URLUtil.guessFileName(url, null, null);
